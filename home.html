@@ -6,11 +6,22 @@
     <title>Document</title>
 </head>
 <body>
-    <p>Welcome to the home page !</p>
-
-    {{range .Messages}}
-        <p>{{.Username}}</p>
-        <p>{{.Body}}</p>
-    {{end}}
+    Courses : 
+    <ul>
+        {{range .Courses}}
+            <li>
+                <p>{{.Name}}</p>
+                <p>Lecturer : {{.Teacher.Name}}</p>
+                Students :
+                <ul>
+                    {{range .Students}}
+                        <li>
+                            <p>{{.Name}}</p>
+                        </li>
+                    {{end}}
+                </ul>
+            </li>
+        {{end}}
+    </ul>
 </body>
 </html>
