@@ -47,11 +47,12 @@ type Post struct {
 func main() {
 	// Capture connection properties.
 	cfg := mysql.Config{
-		User:   os.Getenv("DBUSER"),
-		Passwd: os.Getenv("DBPASS"),
+		User:   os.Getenv("root"),
+		Passwd: os.Getenv(""),
 		Net:    "tcp",
 		Addr:   "127.0.0.1:3306",
 		DBName: "classrooms",
+		AllowNativePasswords: true,
 	}
 	// Get a database handle.
 	var err error
@@ -65,6 +66,9 @@ func main() {
 		log.Fatal(pingErr)
 	}
 	fmt.Println("Connected!")
+
+	fs := http.FileServer(http.Dir("./static"))
+    http.Handle("/static/", http.StripPrefix("/static", fs))
 
 	http.HandleFunc("/", homeHandler)
 	// http.HandleFunc("/", homeHandler)

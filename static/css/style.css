@@ -1,0 +1,164 @@
+:root {
+    --primary-color: #202020;
+    --secondary-color: #303030;
+    --tertiary-color: #313131;
+    --border-color: #545454;
+    --text-color: #d8d8d8;
+    --primary-color-but-diff: #1e1e1e;
+}
+html, body {
+    font-family: 'Bricolage Grotesque', sans-serif;
+    overflow-x: hidden !important;
+    overflow-y: auto !important;
+    max-width: 100% !important;
+    /*transform: translate3d(0,0,0);*/
+}
+.main {
+    font-size: 1.2rem;
+}
+.rounded {
+    border-radius: 25px;
+}
+.first-container {
+    padding-top: 0px !important;
+}
+.container {
+    padding-top: 2em;
+    padding-left: 2em;
+    padding-right: 2em;
+    padding-bottom: 3em;
+}
+.container.is-segmented {
+    margin-left: 0px !important;
+    margin-right: 0px !important;
+    padding-top: 4em;
+    padding-left: 3em;
+    padding-right: 3em;
+    padding-bottom: 3em;
+}
+.title {
+    font-size: 4em;
+    font-weight: bold;
+}
+.subtitle {
+    padding-top: 10px;
+    font-size: 1.3em;
+    font-weight: 300;
+}
+.footer {
+    padding-bottom: 6em;
+    padding-top: 6em;
+    padding-left: 6em;
+    font-size: 0.8em;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    text-align: left;
+}
+.footer a {
+    font-size: 1.3em;
+    font-weight: 300;
+}
+.box {
+    padding: 1em;
+    border-radius: 10px;
+    box-shadow: 0 0 0 0.1em #545454;
+    transition: box-shadow 0.3s;
+}
+.box:hover {
+    box-shadow: 0 0 0 0.1em #545454;
+    transform: scale(1.01);
+}
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+    }
+    100% {
+        transform: scale(1.02);
+    }
+}
+a.link {
+    font-size: 1.3em;
+}
+.accordion {
+    background-color: var(--accordion-color);
+    color: #d8d8d8;
+    cursor: pointer;
+    padding: 18px;
+    width: 100%;
+    border: none;
+    text-align: left;
+    outline: none;
+    font-family: "Bricolage Grotesque", serif;
+    font-size: 18px;
+    border-radius: 25px;
+    transition: 0.3s;
+    border: 1px solid var(--border-color);
+}
+.active, .accordion:hover {
+    background-color: var(--primary-color);
+    border-radius: 25px 25px 0 0;
+    font-size: 19px;
+}
+.accordion:after {
+    content: '\002B';
+    color: #d8d8d8;
+    font-weight: bold;
+    float: right;
+    margin-left: 5px;
+}
+.panel {
+    padding: 0 24px;
+    background-color: var(--primary-color);
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease-out;
+    color: #d8d8d8;
+    border-radius: 0 0 25px 25px;
+}
+
+/* Container for the slider */
+.slider-container {
+width: 80%; /* Adjust width to your liking */
+margin: 0 auto;
+overflow: hidden;
+position: relative;
+}
+
+/* The actual slider that holds the class items */
+.slider {
+display: flex;
+transition: transform 0.5s ease-in-out;
+}
+
+/* Style for each class item */
+.class-item {
+background-color: #add8e6; /* Light blue shade */
+padding: 15px 30px;
+margin: 0 10px;
+border-radius: 5px;
+font-size: 16px;
+display: inline-block;
+text-align: center;
+white-space: nowrap;
+flex-shrink: 0; /* Prevent shrinking */
+}
+
+/* Optional: Style the container for navigation buttons (if you plan to add them) */
+.slider-container::before, .slider-container::after {
+content: '';
+position: absolute;
+top: 50%;
+transform: translateY(-50%);
+background-color: rgba(0, 0, 0, 0.3);
+padding: 10px;
+cursor: pointer;
+}
+
+.slider-container::before {
+left: 10px;
+}
+
+.slider-container::after {
+right: 10px;
+}
