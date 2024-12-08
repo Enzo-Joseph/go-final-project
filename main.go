@@ -1,236 +1,100 @@
 package main
 
 import (
-	"database/sql"
-	"fmt"
-	"html/template"
-	"log"
+	"go-final-project/controllers"
+	"go-final-project/models"
 	"net/http"
-	"os"
 
-	"github.com/go-sql-driver/mysql"
+	"github.com/gin-gonic/gin"
 )
 
-var db *sql.DB
+// type Teacher struct {
+// 	Id   int64
+// 	Name string
+// }
+// type Course struct {
+// 	Id       int64
+// 	Name     string
+// 	Teacher  Teacher
+// 	Students []models.Student
+// }
 
-var templates = template.Must(template.ParseFiles("edit.html", "view.html", "home.html"))
+// type CourseHolder struct {
+// 	Courses []Course
+// }
 
-// var validPath = regexp.MustCompile("^/(edit|save|view)/([a-zA-Z0-9]+)$")
-
-type Student struct {
-	Id   int64
-	Name string
-}
-
-type Teacher struct {
-	Id   int64
-	Name string
-}
-type Course struct {
-	Id       int64
-	Name     string
-	Teacher  Teacher
-	Students []Student
-}
-
-type CourseHolder struct {
-	Courses []Course
-}
-
-type Post struct {
-	Id     int64
-	Course Course
-	title  string
-	body   string
-}
+// type Post struct {
+// 	Id     int64
+// 	Course Course
+// 	title  string
+// 	body   string
+// }
 
 func main() {
-	// Capture connection properties.
-	cfg := mysql.Config{
-		User:   os.Getenv("root"),
-		Passwd: os.Getenv(""),
-		Net:    "tcp",
-		Addr:   "127.0.0.1:3306",
-		DBName: "classrooms",
-		AllowNativePasswords: true,
-	}
-	// Get a database handle.
-	var err error
-	db, err = sql.Open("mysql", cfg.FormatDSN())
-	if err != nil {
-		log.Fatal(err)
-	}
+	models.ConnectDatabase()
 
-	pingErr := db.Ping()
-	if pingErr != nil {
-		log.Fatal(pingErr)
-	}
-	fmt.Println("Connected!")
+	r := gin.Default()
+	r.GET("/ping", func(c *gin.Context) {
+		c.JSON(http.StatusOK, gin.H{
+			"message": "pong",
+		})
+	})
 
-	fs := http.FileServer(http.Dir("./static"))
-    http.Handle("/static/", http.StripPrefix("/static", fs))
-
-	http.HandleFunc("/", homeHandler)
-	// http.HandleFunc("/", homeHandler)
-	// http.HandleFunc("/view/", makeHandler(viewHandler))
-	// http.HandleFunc("/edit/", makeHandler(editHandler))
-	// http.HandleFunc("/save/", makeHandler(saveHandler))
-
-	log.Fatal(http.ListenAndServe(":8080", nil))
+	r.GET("/students", controllers.AllStudents)
+	r.GET("/teachers", controllers.AllTeachers)
+	r.GET("/courses/:student_id", controllers.CoursesByStudentID)
+	r.Run() // listen and serve on 0.0.0.0:8080 (for windows "localhost:8080")
 }
 
-func renderTemplate(w http.ResponseWriter, tmpl string, data any) {
-	err := templates.ExecuteTemplate(w, tmpl+".html", data)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-	}
-}
+// func getTeachers() ([]Teacher, error) {
+// 	// An albums slice to hold data from returned rows.
+// 	var teachers []Teacher
 
-func homeHandler(w http.ResponseWriter, r *http.Request) {
-	courses, err := getCourses()
-	course_holder := CourseHolder{courses}
-	if err != nil {
-		log.Fatal(err)
-	}
-	fmt.Printf("Courses found: %v\n", courses)
-
-	renderTemplate(w, "home", course_holder)
-}
-
-// func viewHandler(w http.ResponseWriter, r *http.Request, title string) {
-// 	_, err := loadPage(title)
+// 	rows, err := db.Query("SELECT * FROM Teachers")
+// 	// fmt.Print(rows)
 // 	if err != nil {
-// 		http.Redirect(w, r, "/edit/"+title, http.StatusFound)
-// 		return
+// 		return nil, fmt.Errorf("getTeachers : %v", err)
 // 	}
-// 	renderTemplate(w, "view")
-// }
-
-// func editHandler(w http.ResponseWriter, r *http.Request, title string) {
-// 	_, err := loadPage(title)
-// 	if err != nil {
-// 		// p = &Page{Title: title}
-// 	}
-// 	renderTemplate(w, "edit")
-// }
-
-// func saveHandler(w http.ResponseWriter, r *http.Request, title string) {
-// 	body := r.FormValue("body")
-// 	p := &Page{Title: title, Body: []byte(body)}
-// 	err := p.save()
-// 	if err != nil {
-// 		http.Error(w, err.Error(), http.StatusInternalServerError)
-// 		return
-// 	}
-// 	http.Redirect(w, r, "/view/"+title, http.StatusFound)
-// }
-
-// func makeHandler(fn func(http.ResponseWriter, *http.Request, string)) http.HandlerFunc {
-// 	return func(w http.ResponseWriter, r *http.Request) {
-// 		m := validPath.FindStringSubmatch(r.URL.Path)
-// 		if m == nil {
-// 			http.NotFound(w, r)
-// 			return
+// 	defer rows.Close()
+// 	// Loop through rows, using Scan to assign column data to struct fields.
+// 	for rows.Next() {
+// 		var teacher Teacher
+// 		if err := rows.Scan(&teacher.Id, &teacher.Name); err != nil {
+// 			return nil, fmt.Errorf("getTeachers : %v", err)
 // 		}
-// 		fn(w, r, m[2])
+// 		teachers = append(teachers, teacher)
 // 	}
+// 	if err := rows.Err(); err != nil {
+// 		return nil, fmt.Errorf("getTeachers : %v", err)
+// 	}
+// 	return teachers, nil
 // }
 
-func getStudents() ([]Student, error) {
-	// An albums slice to hold data from returned rows.
-	var students []Student
+// func getCourses() ([]Course, error) {
+// 	// An albums slice to hold data from returned rows.
+// 	var courses []Course
 
-	rows, err := db.Query("SELECT * FROM Students")
-	// fmt.Print(rows)
-	if err != nil {
-		return nil, fmt.Errorf("getStudents : %v", err)
-	}
-	defer rows.Close()
-	// Loop through rows, using Scan to assign column data to struct fields.
-	for rows.Next() {
-		var student Student
-		if err := rows.Scan(&student.Id, &student.Name); err != nil {
-			return nil, fmt.Errorf("getStudents : %v", err)
-		}
-		students = append(students, student)
-	}
-	if err := rows.Err(); err != nil {
-		return nil, fmt.Errorf("getStudents : %v", err)
-	}
-	return students, nil
-}
+// 	rows, err := db.Query("SELECT Courses.id, Courses.name, Teachers.id, Teachers.name FROM Courses JOIN Teachers ON Courses.teacher_id=Teachers.id")
+// 	if err != nil {
+// 		return nil, fmt.Errorf("getCourses : %v", err)
+// 	}
+// 	defer rows.Close()
+// 	// Loop through rows, using Scan to assign column data to struct fields.
+// 	for rows.Next() {
+// 		var course Course
+// 		if err := rows.Scan(&course.Id, &course.Name, &course.Teacher.Id, &course.Teacher.Name); err != nil {
+// 			return nil, fmt.Errorf("getCourses : %v", err)
+// 		}
+// 		students, err := getStudentsByCourseId(int(course.Id))
+// 		if err != nil {
+// 			return nil, fmt.Errorf("getCourses : %v", err)
+// 		}
+// 		course.Students = students
 
-func getStudentsByCourseId(course_id int) ([]Student, error) {
-	// Get the students who follow the course
-	var students []Student
-	rows, err := db.Query("SELECT Students.id, Students.name FROM StudentCourse JOIN Courses ON StudentCourse.course_id=Courses.id JOIN Students ON StudentCourse.student_id=Students.id WHERE Courses.id=?", course_id)
-	if err != nil {
-		return nil, fmt.Errorf("getStudentsByCourseId : %v", err)
-	}
-	defer rows.Close()
-
-	for rows.Next() {
-		var student Student
-		if err := rows.Scan(&student.Id, &student.Name); err != nil {
-			return nil, fmt.Errorf("getStudentsByCourseId : %v", err)
-		}
-		students = append(students, student)
-	}
-	if err := rows.Err(); err != nil {
-		return nil, fmt.Errorf("getStudentsByCourseId : %v", err)
-	}
-	return students, nil
-}
-
-func getTeachers() ([]Teacher, error) {
-	// An albums slice to hold data from returned rows.
-	var teachers []Teacher
-
-	rows, err := db.Query("SELECT * FROM Teachers")
-	// fmt.Print(rows)
-	if err != nil {
-		return nil, fmt.Errorf("getTeachers : %v", err)
-	}
-	defer rows.Close()
-	// Loop through rows, using Scan to assign column data to struct fields.
-	for rows.Next() {
-		var teacher Teacher
-		if err := rows.Scan(&teacher.Id, &teacher.Name); err != nil {
-			return nil, fmt.Errorf("getTeachers : %v", err)
-		}
-		teachers = append(teachers, teacher)
-	}
-	if err := rows.Err(); err != nil {
-		return nil, fmt.Errorf("getTeachers : %v", err)
-	}
-	return teachers, nil
-}
-
-func getCourses() ([]Course, error) {
-	// An albums slice to hold data from returned rows.
-	var courses []Course
-
-	rows, err := db.Query("SELECT Courses.id, Courses.name, Teachers.id, Teachers.name FROM Courses JOIN Teachers ON Courses.teacher_id=Teachers.id")
-	if err != nil {
-		return nil, fmt.Errorf("getCourses : %v", err)
-	}
-	defer rows.Close()
-	// Loop through rows, using Scan to assign column data to struct fields.
-	for rows.Next() {
-		var course Course
-		if err := rows.Scan(&course.Id, &course.Name, &course.Teacher.Id, &course.Teacher.Name); err != nil {
-			return nil, fmt.Errorf("getCourses : %v", err)
-		}
-		students, err := getStudentsByCourseId(int(course.Id))
-		if err != nil {
-			return nil, fmt.Errorf("getCourses : %v", err)
-		}
-		course.Students = students
-
-		courses = append(courses, course)
-	}
-	if err := rows.Err(); err != nil {
-		return nil, fmt.Errorf("getCourses : %v", err)
-	}
-	return courses, nil
-}
+// 		courses = append(courses, course)
+// 	}
+// 	if err := rows.Err(); err != nil {
+// 		return nil, fmt.Errorf("getCourses : %v", err)
+// 	}
+// 	return courses, nil
+// }
