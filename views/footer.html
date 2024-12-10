@@ -1,0 +1,60 @@
+{{ define "footer" }}
+
+<footer class="footer">
+    <div class="columns is-block-tablet-only">
+        <div class="column">
+            <p style="line-height: 1.5em;">
+                <span class="title is-5"><img src="/static/images/app.png" width="24" height="24" style="vertical-align:middle;">&nbsp;&nbsp;ClassHub</span>
+                <br><br>Student Resource Portal
+                <br>Created by Enzo & Bob
+                <br><span id="copyright"></span>
+                <br><br><a class="link" href="#" target="_blank"><i class="bi bi-instagram"></i></a>&nbsp;&nbsp;&nbsp;
+                <a class="link" href="#" target="_blank"><i class="bi bi-facebook"></i></a>&nbsp;&nbsp;&nbsp;
+                <a class="link" href="#" target="_blank"><i class="bi bi-youtube"></i></a>
+            </p>
+        </div>
+        <div class="column">
+            <p style="line-height: 1.8em;">
+                <span class="title is-5">🔗 Links</span>
+                <br><br><a class="link" href="#">Courses</a>
+                <br><a class="link" href="#">Lecturers</a>
+                <br><a class="link" href="#">Activities</a>
+            </p>
+        </div>
+        <div class="column">
+            <p style="line-height: 1.8em;">
+                <span class="title is-5">💬 Any Questions?</span>
+                <br><br><a class="link" href="#">Contact Us</a>
+            </p>
+        </div>
+        <div class="column">
+            <p style="line-height: 1.8em;">
+                <br><br><br><button id="back-to-top" class="button is-light is-rounded"><i class="bi bi-chevron-up"></i>&nbsp;&nbsp;Back to top</button>
+            </p>
+        </div>
+    </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bulma-carousel@4.0.3/dist/js/bulma-carousel.min.js"></script>
+<script src="/static/js/script.js"></script>
+<script>
+    $(document).ready(function() {
+        $(".navbar-burger").click(function() {
+            $(".navbar-burger").toggleClass("is-active");
+            $(".navbar-menu").toggleClass("is-active");
+        });
+
+        // back to top
+        $('#back-to-top').click(function() {
+            $("html, body").animate({scrollTop: 0}, 500);
+        });
+
+        // copyright
+        $("#copyright").text(new Date().getFullYear() + " © Enzo & Bob");
+    });
+</script>
+</body>
+</html>
+
+{{ end}}

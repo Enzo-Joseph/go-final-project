@@ -1,0 +1,55 @@
+{{ template "header" . }}
+{{ template "navbar" . }}
+
+<div class="container">
+    <div class="has-text-centered">
+        <div class="hero is-dark is-bold">
+            <div class="hero-body">
+                <div class="container">
+                    <img src="/static/images/app.png" alt="ClassHub Logo" style="max-height: 100px;">
+                    <h1 class="title is-2">ClassHub</h1>
+                    <h1 class="title is-4">The #1 Classroom App</h1>
+                </div>
+            </div>
+        </div>
+        <br>
+        <div class="columns is-multiline">
+            <div class="column is-6">
+                <div class="card">
+                    <div class="card-content">
+                        <p class="title is-4">Courses</p>
+                        <p class="subtitle is-6">Explore a wide range of courses tailored to your needs.</p>
+                        <a href="/courses" class="button is-light">View Courses 📚</a>
+                    </div>
+                </div>
+            </div>
+            <div class="column is-6">
+                <div class="card">
+                    <div class="card-content">
+                        <p class="title is-4">Lecturers</p>
+                        <p class="subtitle is-6">View all lecturers and their courses.</p>
+                        <a href="/lecturers" class="button is-light">View Lecturers 👤</a>
+                    </div>
+                </div>
+            </div>
+            <div class="column is-6">
+                <div class="card">
+                    <div class="card-content">
+                        <p class="title is-4">Dummy Section</p>
+                        <p class="subtitle is-6">This section is currently under development.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="column is-6">
+                <div class="card">
+                    <div class="card-content">
+                        <p class="title is-4">Dummy Section</p>
+                        <p class="subtitle is-6">This section is currently under development.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{{ template "footer" .}}

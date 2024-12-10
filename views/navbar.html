@@ -1,0 +1,47 @@
+{{ define "navbar" }}
+
+<div class="notification is-warning is-light">
+    <center>This website is still in development. Some features may not work as expected.</center>
+</div>
+<nav class="navbar" role="navigation" aria-label="main navigation">
+    <div class="navbar-brand">
+        <a class="navbar-item link" href="/">
+            <img src="/static/images/app.png" style="max-height: fit-content; height: 48px;"><b style="font-size: 24px;">ClassHub</b>
+        </a>
+        <a role="button" class="navbar-burger link" aria-label="menu" aria-expanded="false" data-target="navbar-main">
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+        </a>
+    </div>
+    <div id="navbar-main" class="navbar-menu">
+        <div class="navbar-start">
+            <a class="navbar-item link" href="/volunteers">📚 Courses</a>
+            <a class="navbar-item link" href="/activities">🎭 Activities</a>
+        </div>
+        <div class="navbar-end">
+            <div class="navbar-item">
+                <div class="field is-grouped">
+                    <p class="control">
+                        <a class="button is-dark" href="/login">
+                            <span class="icon">
+                                <i class="bi bi-box-arrow-in-left"></i>
+                            </span>
+                            <span>Login</span>
+                        </a>
+                    </p>
+                    <p class="control">
+                        <a class="button is-info" href="/sign-up">
+                            <span class="icon">
+                                <i class="bi bi-box-arrow-right"></i>
+                            </span>
+                            <span>Sign Up</span>
+                        </a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</nav>
+{{ end }}

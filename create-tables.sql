@@ -5,8 +5,8 @@
 --     PRIMARY KEY (`id`)
 -- );
 
--- DROP TABLE IF EXISTS teachers;
--- CREATE TABLE teachers (
+-- DROP TABLE IF EXISTS lecturers;
+-- CREATE TABLE lecturers (
 --     id      INT AUTO_INCREMENT NOT NULL,
 --     name    VARCHAR(255) NOT NULL,
 --     PRIMARY KEY (`id`)
@@ -16,9 +16,9 @@
 -- CREATE TABLE courses (
 --   id            INT AUTO_INCREMENT NOT NULL,
 --   name          VARCHAR(255) NOT NULL,
---   teacher_id    INT NOT NULL,
+--   lecturer_id    INT NOT NULL,
 --   PRIMARY KEY (`id`),
---   FOREIGN KEY (`teacher_id`) REFERENCES teachers(id)
+--   FOREIGN KEY (`lecturer_id`) REFERENCES lecturers(id)
 -- );
 
 -- DROP TABLE IF EXISTS student_course;
@@ -34,11 +34,11 @@
 -- DROP TABLE IF EXISTS post;
 -- CREATE TABLE post (
 --   id            INT AUTO_INCREMENT NOT NULL,
---   teacher_id    INT NOT NULL,
+--   lecturer_id    INT NOT NULL,
 --   title         VARCHAR(255) NOT NULL,
 --   body          TEXT NOT NULL,
 --   PRIMARY KEY (`id`),
---   FOREIGN KEY (`teacher_id`) REFERENCES teachers(id)
+--   FOREIGN KEY (`lecturer_id`) REFERENCES lecturers(id)
 -- );
 
 -- INSERT INTO students
@@ -47,13 +47,13 @@
 --   ('Enzo'),
 --   ('Robin');
 
--- INSERT INTO teachers
+-- INSERT INTO lecturers
 --   (name)
 -- VALUES
 --   ('Agus');
 
 -- INSERT INTO courses
---   (name, teacher_id)
+--   (name, lecturer_id)
 -- VALUES
 --   ('Framework Based Programming', 1);
 
@@ -64,16 +64,16 @@
 --   (2, 1);
 
 -- INSERT INTO post
---   (teacher_id, title, body)
+--   (lecturer_id, title, body)
 -- VALUES
 --   (1, "Session 16", "This session will be the presentation of the final projects.");
 
 
 -- Drop tables if they exist
-DROP TABLE IF EXISTS student_course;
-DROP TABLE IF EXISTS post;
+DROP TABLE IF EXISTS student_courses;
+DROP TABLE IF EXISTS posts;
 DROP TABLE IF EXISTS courses;
-DROP TABLE IF EXISTS teachers;
+DROP TABLE IF EXISTS lecturers;
 DROP TABLE IF EXISTS students;
 
 -- Create students table
@@ -83,8 +83,8 @@ CREATE TABLE students (
     PRIMARY KEY (`id`)
 );
 
--- Create teachers table
-CREATE TABLE teachers (
+-- Create lecturers table
+CREATE TABLE lecturers (
     id      INT AUTO_INCREMENT NOT NULL,
     name    VARCHAR(255) NOT NULL,
     PRIMARY KEY (`id`)
@@ -94,13 +94,13 @@ CREATE TABLE teachers (
 CREATE TABLE courses (
   id            INT AUTO_INCREMENT NOT NULL,
   name          VARCHAR(255) NOT NULL,
-  teacher_id    INT NOT NULL,
+  lecturer_id    INT NOT NULL,
   PRIMARY KEY (`id`),
-  FOREIGN KEY (`teacher_id`) REFERENCES teachers(id)
+  FOREIGN KEY (`lecturer_id`) REFERENCES lecturers(id)
 );
 
 -- Create student_course table
-CREATE TABLE student_course (
+CREATE TABLE student_courses (
   id            INT AUTO_INCREMENT NOT NULL,
   student_id    INT NOT NULL,
   course_id     INT NOT NULL,
@@ -110,13 +110,15 @@ CREATE TABLE student_course (
 );
 
 -- Create post table
-CREATE TABLE post (
+CREATE TABLE posts (
   id            INT AUTO_INCREMENT NOT NULL,
-  teacher_id    INT NOT NULL,
+  lecturer_id    INT NOT NULL,
+  course_id     INT NOT NULL,
   title         VARCHAR(255) NOT NULL,
   body          TEXT NOT NULL,
   PRIMARY KEY (`id`),
-  FOREIGN KEY (`teacher_id`) REFERENCES teachers(id)
+  FOREIGN KEY (`lecturer_id`) REFERENCES lecturers(id),
+  FOREIGN KEY (`course_id`) REFERENCES courses(id)
 );
 
 -- Insert students
@@ -132,21 +134,21 @@ INSERT INTO students (name) VALUES
   ('Owen Rivera'), ('Piper Cox'), ('Quinn Ward'), ('Ryan Flores'), ('Samantha Barnes'),
   ('Tyler Ross'), ('Victoria Powell'), ('Will Brooks'), ('Xavier Bell'), ('Yasmine Reed');
 
--- Insert teachers
-INSERT INTO teachers (name) VALUES
+-- Insert lecturers
+INSERT INTO lecturers (name) VALUES
   ('Agus S'), ('Brian T'), ('Cathy V'), ('Daniel M'), ('Elaine R'),
   ('Frank Z'), ('Georgia P'), ('Hank F'), ('Isabel G'), ('Jack L'),
   ('Kara N'), ('Liam H'), ('Mandy J'), ('Nora C'), ('Oliver W');
 
 -- Insert courses
-INSERT INTO courses (name, teacher_id) VALUES
+INSERT INTO courses (name, lecturer_id) VALUES
   ('Math 101', 1), ('English Literature', 2), ('Physics', 3), 
   ('Chemistry', 4), ('Biology', 5), ('History', 6), 
   ('Computer Science', 7), ('Art', 8), ('Music', 9), 
   ('Physical Education', 10);
 
 -- Insert student_course
-INSERT INTO student_course (student_id, course_id) VALUES
+INSERT INTO student_courses (student_id, course_id) VALUES
   (1, 1), (1, 2), (1, 3), (2, 1), (3, 2), (4, 3), (5, 4),
   (6, 5), (7, 6), (8, 7), (9, 8), (10, 9),
   (11, 10), (12, 1), (13, 2), (14, 3), (15, 4),
@@ -159,14 +161,15 @@ INSERT INTO student_course (student_id, course_id) VALUES
   (46, 5), (47, 6), (48, 7), (49, 8), (50, 9);
 
 -- Insert post
-INSERT INTO post (teacher_id, title, body) VALUES
-  (1, "Welcome to Math 101", "This is the first session of Math 101."),
-  (2, "Introduction to English Literature", "We will start with Shakespeare."),
-  (3, "Physics Fundamentals", "Understanding motion and forces."),
-  (4, "Chemistry Basics", "Today we discuss atoms."),
-  (5, "Biology 101", "Introduction to cellular biology."),
-  (6, "Historical Perspectives", "The Renaissance era."),
-  (7, "CS Intro", "Getting started with programming."),
-  (8, "Art Appreciation", "Analyzing famous paintings."),
-  (9, "Music Theory", "Understanding scales and chords."),
-  (10, "PE Introduction", "Overview of physical fitness activities.");
+INSERT INTO posts (lecturer_id, course_id, title, body) VALUES
+  (1, 1, "Welcome to Math 101", "This is the first session of Math 101."),
+  (2, 2, "Introduction to English Literature", "We will start with Shakespeare."),
+  (3, 3, "Physics Fundamentals", "Understanding motion and forces."),
+  (4, 4, "Chemistry Basics", "Today we discuss atoms."),
+  (5, 5, "Biology 101", "Introduction to cellular biology."),
+  (6, 6, "Historical Perspectives", "The Renaissance era."),
+  (7, 7, "CS Intro", "Getting started with programming."),
+  (8, 8, "Art Appreciation", "Analyzing famous paintings."),
+  (9, 9, "Music Theory", "Understanding scales and chords."),
+  (10, 10, "PE Introduction", "Overview of physical fitness activities.");
+

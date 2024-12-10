@@ -1,0 +1,27 @@
+{{template "header" .}}
+{{template "navbar" .}}
+
+<div class="container">
+    <div class="has-text-centered">
+        <div class="hero is-dark is-bold">
+            <div class="hero-body">
+                <div class="container">
+                    <img src="/static/images/app.png" alt="ClassHub Logo" style="max-height: 100px;">
+                    <h1 class="title is-2">ClassHub</h1>
+                    <h1 class="title is-4">The #1 Classroom App</h1>
+                </div>
+            </div>
+        </div>
+        <br>
+        <h1 class="title is-2">Courses</h1>
+        <ul>
+            {{range .courses}}
+                <li>
+                    <a href="/courses/{{.ID}}">{{.Name}}</a>
+                </li>
+            {{end}}
+        </ul>
+    </div>
+</div>
+
+{{template "footer" .}}

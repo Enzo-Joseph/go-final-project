@@ -21,7 +21,8 @@ func ConnectDatabase() {
 	}
 
 	// Migrate the schema
-	db.AutoMigrate(&Teacher{}, &Student{}, &Course{})
+	db.AutoMigrate(&Lecturer{}, &Student{}, &Course{}, &Post{})
+	db.AutoMigrate(&Post{})
 
 	DB = db
 }
