@@ -5,7 +5,9 @@ import (
 	"net/http"
 	"strconv"
 
+	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
+	"gorm.io/gorm"
 )
 
 func CoursesByStudentID(c *gin.Context) {
@@ -30,11 +32,19 @@ func AllCourses(c *gin.Context) {
 		panic(err)
 	}
 
+	session := sessions.Default(c)
+	userID := session.Get("user_id")
+	userName := session.Get("user_name")
+	userRole := session.Get("user_role")
+
 	c.HTML(
 		http.StatusOK,
 		"courses.html",
 		gin.H{
 			"courses": courses,
+			"user_id":  userID,
+			"user_name": userName,
+			"user_role": userRole,
 		},
 	)
 }
@@ -53,12 +63,43 @@ func CoursesByID(c *gin.Context) {
 		panic(err)
 	}
 
+	session := sessions.Default(c)
+
+	if session.Get("user_id") == nil {
+		c.HTML(
+			http.StatusOK,
+			"course.html",
+			gin.H{
+				"course": course,
+			},
+		)
+		return
+	}
+
+	userID := session.Get("user_id").(int)
+	userName := session.Get("user_name")
+	userRole := session.Get("user_role")
+
+	// check if user is enrolled in course
+	isEnrolled := false
+	enrollment, err := models.CheckEnrollment(id, userID)
+	if err != nil && err != gorm.ErrRecordNotFound {
+		panic(err)
+	}
+	if enrollment.ID != 0 {
+		isEnrolled = true
+	}
+
 	c.HTML(
 		http.StatusOK,
 		"course.html",
 		gin.H{
-			"course": course,
-			"posts":  posts,
+			"course":    course,
+			"posts":     posts,
+			"user_id":   userID,
+			"user_name": userName,
+			"user_role": userRole,
+			"isEnrolled": isEnrolled,
 		},
 	)
 }

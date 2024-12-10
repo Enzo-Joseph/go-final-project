@@ -4,6 +4,7 @@ import (
 	"go-final-project/models"
 	"net/http"
 
+	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
 )
 
@@ -14,11 +15,19 @@ func AllLecturers(c *gin.Context) {
 		panic(err)
 	}
 
+	session := sessions.Default(c)
+	userID := session.Get("user_id")
+	userName := session.Get("user_name")
+	userRole := session.Get("user_role")
+
 	c.HTML(
 		http.StatusOK,
 		"lecturers.html",
 		gin.H{
 			"lecturers": lecturers,
+			"user_id":   userID,
+			"user_name": userName,
+			"user_role": userRole,
 		},
 	)
 }
@@ -37,12 +46,20 @@ func LecturerByID(c *gin.Context) {
 		panic(err)
 	}
 
+	session := sessions.Default(c)
+	userID := session.Get("user_id")
+	userName := session.Get("user_name")
+	userRole := session.Get("user_role")
+
 	c.HTML(
 		http.StatusOK,
 		"lecturer.html",
 		gin.H{
 			"lecturer": lecturer,
 			"courses":  courses,
+			"user_id":  userID,
+			"user_name": userName,
+			"user_role": userRole,
 		},
 	)
 }

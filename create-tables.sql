@@ -161,3 +161,7 @@ INSERT INTO posts (lecturer_id, course_id, title, body) VALUES
   (3, 9, "Music Theory", "Understanding scales and chords."),
   (1, 10, "PE Introduction", "Overview of physical fitness activities.");
 
+ALTER TABLE student_courses
+ADD COLUMN created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+ADD COLUMN updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+ADD COLUMN deleted_at DATETIME DEFAULT NULL;
