@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Course Details</title>
+    <link rel="icon" href="/static/img/favicon.ico" type="image/x-icon" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.2/css/bulma.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma-carousel@4.0.3/dist/css/bulma-carousel.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="/static/css/style.css">
+    <style>
+        .fantasy {
+            color: #ffa500;
+            font-weight: bold;
+            text-shadow: 0 0 8px #ffa500;
+            background-image: url("/static/img/sparkling.gif");
+            background-repeat: repeat;
+            background-size: 60%;
+        }
+        .a-card {
+            transition: transform 0.5s ease;
+        }
+        .a-card:hover {
+            transform: scale(1.02);
+        }
+    </style>
+</head>
+<body>
+    <div class="notification is-warning is-light">
+        <center>This website is still in development. Some features may not work as expected.</center>
+    </div>
+    <nav class="navbar" role="navigation" aria-label="main navigation">
+        <div class="navbar-brand">
+            <a class="navbar-item link" href="/">
+                <img src="/static/images/app.png" style="max-height: fit-content; height: 48px;"><b style="font-size: 24px;">ClassHub</b>
+            </a>
+            <a role="button" class="navbar-burger link" aria-label="menu" aria-expanded="false" data-target="navbar-main">
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+            </a>
+        </div>
+        <div id="navbar-main" class="navbar-menu">
+            <div class="navbar-start">
+                <a class="navbar-item link" href="/volunteers">📚 Courses</a>
+                <a class="navbar-item link" href="/activities">🎭 Activities</a>
+            </div>
+            <div class="navbar-end">
+                <div class="navbar-item">
+                    <div class="field is-grouped">
+                        <p class="control">
+                            <a class="button is-dark" href="/login">
+                                <span class="icon">
+                                    <i class="bi bi-box-arrow-in-left"></i>
+                                </span>
+                                <span>Login</span>
+                            </a>
+                        </p>
+                        <p class="control">
+                            <a class="button is-info" href="/sign-up">
+                                <span class="icon">
+                                    <i class="bi bi-box-arrow-right"></i>
+                                </span>
+                                <span>Sign Up</span>
+                            </a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <h4 class="title is-4">Course Details 🔍</h4>
+        <h1 class="title is-1">📕 {{.course.Name}}</h1>
+        <div class="columns">
+            <div class="column">
+                <div class="card" style="min-height: 150px;">
+                    <div class="card-content">
+                        <div class="content">
+                            <i class="bi bi-mortarboard-fill" style="font-size: 2em;"></i>&nbsp;&nbsp;&nbsp;
+                            <span class="title is-3 has-text-grey-light">{{.course.TeacherName}}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="column">
+                <div class="card" style="min-height: 150px;">
+                    <div class="card-content">
+                        <div class="content">
+                            <i class="bi bi-person-fill" style="font-size: 2em;"></i>&nbsp;&nbsp;&nbsp;
+                            <span class="title is-3 has-text-grey-light"><span style="color: rgb(172, 0, 0)">{{.course.StudentCount}}</span> Student(s) Enrolled</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-content">
+                <div class="content">
+                    <i class="bi bi-chat-fill" style="font-size: 2em;"></i>&nbsp;&nbsp;&nbsp;
+                    <span class="title is-3 has-text-grey-light">{{.course.Description}}</span>
+                </div>
+            </div>
+        </div>
+        <div class="card" >
+            <div class="card-content">
+                <div class="content has-text-centered">
+                    <p>By continuing, you agree to your profile and enrollment request being reviewed by the lecturer of this course</p>
+                    <div class="buttons is-centered is-grouped">
+                        <a class="button is-dark" href="/courses"><i class="bi bi-arrow-left"></i>&nbsp;&nbsp;Back to Courses</a>
+                        <button id="enroll_btn" class="button is-info">Enroll Now 🚀</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="columns is-block-tablet-only">
+            <div class="column">
+                <p style="line-height: 1.5em;">
+                    <span class="title is-5"><img src="/static/images/app.png" width="24" height="24" style="vertical-align:middle;">&nbsp;&nbsp;ClassHub</span>
+                    <br><br>Student Resource Portal
+                    <br>Created by Enzo & Bob
+                    <br><span id="copyright"></span>
+                    <br><br><a class="link" href="#" target="_blank"><i class="bi bi-instagram"></i></a>&nbsp;&nbsp;&nbsp;
+                    <a class="link" href="#" target="_blank"><i class="bi bi-facebook"></i></a>&nbsp;&nbsp;&nbsp;
+                    <a class="link" href="#" target="_blank"><i class="bi bi-youtube"></i></a>
+                </p>
+            </div>
+            <div class="column">
+                <p style="line-height: 1.8em;">
+                    <span class="title is-5">🔗 Links</span>
+                    <br><br><a class="link" href="#">Courses</a>
+                    <br><a class="link" href="#">Lecturers</a>
+                    <br><a class="link" href="#">Activities</a>
+                </p>
+            </div>
+            <div class="column">
+                <p style="line-height: 1.8em;">
+                    <span class="title is-5">💬 Any Questions?</span>
+                    <br><br><a class="link" href="#">Contact Us</a>
+                </p>
+            </div>
+            <div class="column">
+                <p style="line-height: 1.8em;">
+                    <br><br><br><button id="back-to-top" class="button is-light is-rounded"><i class="bi bi-chevron-up"></i>&nbsp;&nbsp;Back to top</button>
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bulma-carousel@4.0.3/dist/js/bulma-carousel.min.js"></script>
+    <script src="/static/js/script.js"></script>
+    <script>
+        $(document).ready(function() {
+            $(".navbar-burger").click(function() {
+                $(".navbar-burger").toggleClass("is-active");
+                $(".navbar-menu").toggleClass("is-active");
+            });
+
+            // back to top
+            $('#back-to-top').click(function() {
+                $("html, body").animate({scrollTop: 0}, 500);
+            });
+
+            // copyright
+            $("#copyright").text(new Date().getFullYear() + " © Enzo & Bob");
+        });
+
+        $("#enroll_btn").click(function() {
+            $.ajax({
+                url: "/course/{{.course.ID}}/enroll",
+                method: "GET",
+                success: function(data) {
+                    data = JSON.parse(data.responseText);
+                    alert(data.message);
+                },
+                error: function(data) {
+                    data = JSON.parse(data.responseText);
+                    alert(data.message);
+                }
+            });
+        });
+    </script>
+</body>
+</html>

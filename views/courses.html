@@ -2,26 +2,24 @@
 {{template "navbar" .}}
 
 <div class="container">
-    <div class="has-text-centered">
-        <div class="hero is-dark is-bold">
-            <div class="hero-body">
-                <div class="container">
-                    <img src="/static/images/app.png" alt="ClassHub Logo" style="max-height: 100px;">
-                    <h1 class="title is-2">ClassHub</h1>
-                    <h1 class="title is-4">The #1 Classroom App</h1>
+    <h1 class="title is-1">List of Courses 📚</h1>
+    <ul>
+        {{range .courses}}
+        <div class="card">
+            <div class="card-content">
+                <div class="content">
+                    <p>
+                        <span class="title is-3">📕 {{.Name}}</span><br>
+                        Lecturer: {{.LecturerName}}<br>
+                        Students: {{.StudentCount}}<br>
+                        <a href="/courses/{{.ID}}" class="button is-info" style="float: right;">View Course</a><br>
+                        <p></p>
+                    </p>
                 </div>
             </div>
         </div>
-        <br>
-        <h1 class="title is-2">Courses</h1>
-        <ul>
-            {{range .courses}}
-                <li>
-                    <a href="/courses/{{.ID}}">{{.Name}}</a>
-                </li>
-            {{end}}
-        </ul>
-    </div>
+        {{end}}
+    </ul>
 </div>
 
 {{template "footer" .}}

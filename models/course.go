@@ -6,13 +6,21 @@ type Course struct {
 	gorm.Model
 	ID         int    `gorm:"primaryKey"`
 	Name       string `gorm:"size:255"`
+	Description string
 	LecturerID int
+	LecturerName string
+	StudentCount int
 }
 
 func GetCourses() ([]Course, error) {
 	var courses []Course
 
-	res := DB.Find(&courses)
+	res := DB.Table("courses").
+		Select("courses.id, courses.name, courses.description, courses.lecturer_id, users.name as lecturer_name, COUNT(student_courses.student_id) as student_count").
+		Joins("left join users on courses.lecturer_id=users.id").
+		Joins("left join student_courses on courses.id=student_courses.course_id").
+		Group("courses.id").
+		Find(&courses)
 
 	return courses, res.Error
 }
@@ -20,7 +28,13 @@ func GetCourses() ([]Course, error) {
 func GetCourseByID(id string) (Course, error) {
 	var course Course
 
-	res := DB.First(&course, id)
+	res := DB.Table("courses").
+		Select("courses.id, courses.name, courses.description, courses.lecturer_id, users.name as lecturer_name, COUNT(student_courses.student_id) as student_count").
+		Joins("left join users on courses.lecturer_id=users.id").
+		Joins("left join student_courses on courses.id=student_courses.course_id").
+		Where("courses.id=?", id).
+		Group("courses.id").
+		Find(&course)
 
 	return course, res.Error
 }
@@ -28,7 +42,13 @@ func GetCourseByID(id string) (Course, error) {
 func GetCoursesByStudentID(studentID int) ([]Course, error) {
 	var courses []Course
 
-	res := DB.Table("courses").Joins("left join student_course on courses.id=student_course.course_id").Where("student_course.student_id=?", studentID).Find(&courses)
+	res := DB.Table("courses").
+		Select("courses.id, courses.name, courses.description, courses.lecturer_id, users.name as lecturer_name, COUNT(student_courses.student_id) as student_count").
+		Joins("left join users as lecturer on courses.lecturer_id=users.id").
+		Joins("left join student_courses on courses.id=student_courses.course_id").
+		Where("student_courses.student_id=?", studentID).
+		Group("courses.id").
+		Find(&courses)
 
 	return courses, res.Error
 }
