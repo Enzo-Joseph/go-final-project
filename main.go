@@ -12,6 +12,7 @@ func main() {
 
 	r := gin.Default()
 	r.LoadHTMLGlob("views/*")
+	r.Static("/static", "static")
 	r.GET("/", controllers.HomePage)
 
 	r.GET("/students", controllers.AllStudents)

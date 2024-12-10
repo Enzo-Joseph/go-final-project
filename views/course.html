@@ -2,31 +2,71 @@
 {{template "navbar" .}}
 
 <div class="container">
-    <div class="has-text-centered">
-        <div class="hero is-dark is-bold">
-            <div class="hero-body">
-                <div class="container">
-                    <img src="/static/images/app.png" alt="ClassHub Logo" style="max-height: 100px;">
-                    <h1 class="title is-2">ClassHub</h1>
-                    <h1 class="title is-4">The #1 Classroom App</h1>
-                </div>
-            </div>
-        </div>
-        <br>
-        <h1 class="title is-2">{{.Name}}</h1>
-        <div class="columns is-multiline">
-            {{range .posts}}
-            <div class="column is-6">
-                <div class="card">
-                    <div class="card-content">
-                        <p class="title is-4">{{.Title}}</p>
-                        <p class="subtitle is-6">{{.Body}}</p>
-                        <!-- <a href="/courses" class="button is-light">View Courses 📚</a> -->
+    <h4 class="title is-4">Course Details 🔍</h4>
+    <h1 class="title is-1">📕 {{.course.Name}}</h1>
+    <div class="columns">
+        <div class="column">
+            <div class="card" style="min-height: 150px;">
+                <div class="card-content">
+                    <div class="content">
+                        <i class="bi bi-mortarboard-fill" style="font-size: 2em;"></i>&nbsp;&nbsp;&nbsp;
+                        <span class="title is-3 has-text-grey-light">{{.course.LecturerName}}</span>
                     </div>
                 </div>
             </div>
-            {{end}}
         </div>
+        <div class="column">
+            <div class="card" style="min-height: 150px;">
+                <div class="card-content">
+                    <div class="content">
+                        <i class="bi bi-person-fill" style="font-size: 2em;"></i>&nbsp;&nbsp;&nbsp;
+                        <span class="title is-3 has-text-grey-light"><span style="color: rgb(172, 0, 0)">{{.course.StudentCount}}</span> Student(s) Enrolled</span><br>
+                        <span class="title is-5 has-text-danger">(You are currently not enrolled)</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-content">
+            <div class="content">
+                <i class="bi bi-chat-fill" style="font-size: 2em;"></i>&nbsp;&nbsp;&nbsp;
+                <span class="title is-3 has-text-grey-light">{{.course.Description}}</span>
+            </div>
+        </div>
+    </div>
+    <div class="card" >
+        <div class="card-content">
+            <div class="content has-text-centered">
+                <h1 class="title is-3">Ready to enroll?</h1>
+                <p>By continuing, you agree to your profile and enrollment request being reviewed by the lecturer of this course</p>
+                <div class="buttons is-centered is-grouped">
+                    <a class="button is-dark" href="/courses"><i class="bi bi-arrow-left"></i>&nbsp;&nbsp;Back to Courses</a>
+                    <button id="enroll_btn" class="button is-info">Enroll Now 🚀</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card" >
+        <div class="card-content">
+            <div class="content has-text-centered">
+                <h1 class="title is-3 has-text-centered">Posts by {{.course.LecturerName}} 📝</h1>
+            </div>
+        </div>
+    </div>
+    <div class="columns is-multiline">
+        {{range .posts }}
+        <div class="column is-6">
+            <div class="card">
+                <div class="card-content">
+                    <div class="content">
+                        <p class="title is-4"><a href="/post/{{.ID}}">{{.Title}} </a></p>
+                        <p class="subtitle is-6">{{.Body}} </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {{end}}
     </div>
 </div>
 

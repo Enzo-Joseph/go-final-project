@@ -75,18 +75,14 @@ DROP TABLE IF EXISTS posts;
 DROP TABLE IF EXISTS courses;
 DROP TABLE IF EXISTS lecturers;
 DROP TABLE IF EXISTS students;
+DROP TABLE IF EXISTS users;
 
--- Create students table
-CREATE TABLE students (
+CREATE TABLE users (
     id      INT AUTO_INCREMENT NOT NULL,
     name    VARCHAR(255) NOT NULL,
-    PRIMARY KEY (`id`)
-);
-
--- Create lecturers table
-CREATE TABLE lecturers (
-    id      INT AUTO_INCREMENT NOT NULL,
-    name    VARCHAR(255) NOT NULL,
+    username VARCHAR(255) NOT NULL,
+    password VARCHAR(255) NOT NULL,
+    role    VARCHAR(255) NOT NULL,
     PRIMARY KEY (`id`)
 );
 
@@ -94,9 +90,10 @@ CREATE TABLE lecturers (
 CREATE TABLE courses (
   id            INT AUTO_INCREMENT NOT NULL,
   name          VARCHAR(255) NOT NULL,
+  description   TEXT,
   lecturer_id    INT NOT NULL,
   PRIMARY KEY (`id`),
-  FOREIGN KEY (`lecturer_id`) REFERENCES lecturers(id)
+  FOREIGN KEY (`lecturer_id`) REFERENCES users(id)
 );
 
 -- Create student_course table
@@ -105,7 +102,7 @@ CREATE TABLE student_courses (
   student_id    INT NOT NULL,
   course_id     INT NOT NULL,
   PRIMARY KEY (`id`),
-  FOREIGN KEY (`student_id`) REFERENCES students(id),
+  FOREIGN KEY (`student_id`) REFERENCES users(id),
   FOREIGN KEY (`course_id`) REFERENCES courses(id)
 );
 
@@ -117,59 +114,50 @@ CREATE TABLE posts (
   title         VARCHAR(255) NOT NULL,
   body          TEXT NOT NULL,
   PRIMARY KEY (`id`),
-  FOREIGN KEY (`lecturer_id`) REFERENCES lecturers(id),
+  FOREIGN KEY (`lecturer_id`) REFERENCES users(id),
   FOREIGN KEY (`course_id`) REFERENCES courses(id)
 );
 
--- Insert students
-INSERT INTO students (name) VALUES
-  ('Alice Johnson'), ('Bob Smith'), ('Charlie Brown'), ('David Wilson'), ('Eva Davis'),
-  ('Frank Moore'), ('Grace Taylor'), ('Hannah White'), ('Ian Thompson'), ('Jack Garcia'),
-  ('Kara Martinez'), ('Liam Anderson'), ('Mia Harris'), ('Noah Lewis'), ('Olivia Clark'),
-  ('Paul Walker'), ('Quincy Lee'), ('Rachel Hall'), ('Sam Young'), ('Tina Allen'),
-  ('Uma Scott'), ('Victor Hill'), ('Wendy Adams'), ('Xander Baker'), ('Yara Nelson'),
-  ('Zachary Carter'), ('Abby Green'), ('Ben King'), ('Caitlyn Phillips'), ('Daniel Cooper'),
-  ('Ethan Turner'), ('Fiona Wright'), ('Gabe Morris'), ('Helen Mitchell'), ('Isla Perez'),
-  ('Jake Rogers'), ('Kimberly Stewart'), ('Logan Howard'), ('Madison Wood'), ('Nathan Kelly'),
-  ('Owen Rivera'), ('Piper Cox'), ('Quinn Ward'), ('Ryan Flores'), ('Samantha Barnes'),
-  ('Tyler Ross'), ('Victoria Powell'), ('Will Brooks'), ('Xavier Bell'), ('Yasmine Reed');
-
--- Insert lecturers
-INSERT INTO lecturers (name) VALUES
-  ('Agus S'), ('Brian T'), ('Cathy V'), ('Daniel M'), ('Elaine R'),
-  ('Frank Z'), ('Georgia P'), ('Hank F'), ('Isabel G'), ('Jack L'),
-  ('Kara N'), ('Liam H'), ('Mandy J'), ('Nora C'), ('Oliver W');
+-- Insert Users
+INSERT INTO users (name, username, password, role) VALUES
+  ('Brian Taylor', 'brian', 'password', 'lecturer'),
+  ('Cathy V', 'cathy', 'password', 'lecturer'),
+  ('Agus', 'agus', 'password', 'lecturer'),
+  ('Enzo', 'enzo', 'password', 'student'),
+  ('Robin', 'robin', 'password', 'student'),
+  ('Alice Johnson', 'alice', 'password', 'student'),
+  ('Bob Smith', 'bob', 'password', 'student'),
+  ('Charlie Brown', 'charlie', 'password', 'student'),
+  ('David Wilson', 'david', 'password', 'student'),
+  ('Eva Davis', 'eva', 'password', 'student'),
+  ('Frank Moore', 'frank', 'password', 'student'),
+  ('Grace Taylor', 'grace', 'password', 'student'),
+  ('Hannah White', 'hannah', 'password', 'student'),
+  ('Ian Thompson', 'ian', 'password', 'student');
 
 -- Insert courses
-INSERT INTO courses (name, lecturer_id) VALUES
-  ('Math 101', 1), ('English Literature', 2), ('Physics', 3), 
-  ('Chemistry', 4), ('Biology', 5), ('History', 6), 
-  ('Computer Science', 7), ('Art', 8), ('Music', 9), 
-  ('Physical Education', 10);
+INSERT INTO courses (name, description, lecturer_id) VALUES
+  ('Math 101', 'The basics of math.', 1), ('English Literature', 'The history of English literature.', 2), ('Physics', 'Fundamentals of physics.', 3), 
+  ('Chemistry', 'The science of chemistry.', 1), ('Biology', 'The study of life.', 2), ('History', 'The history of the world.', 3), 
+  ('Computer Science', 'Getting started with programming.', 1), ('Art', 'Analyzing famous paintings.', 2), ('Music', 'Understanding scales and chords.', 3), 
+  ('Physical Education', 'Overview of physical fitness activities.', 1);
 
 -- Insert student_course
 INSERT INTO student_courses (student_id, course_id) VALUES
-  (1, 1), (1, 2), (1, 3), (2, 1), (3, 2), (4, 3), (5, 4),
+  (4, 3), (5, 4),
   (6, 5), (7, 6), (8, 7), (9, 8), (10, 9),
-  (11, 10), (12, 1), (13, 2), (14, 3), (15, 4),
-  (16, 5), (17, 6), (18, 7), (19, 8), (20, 9),
-  (21, 10), (22, 1), (23, 2), (24, 3), (25, 4),
-  (26, 5), (27, 6), (28, 7), (29, 8), (30, 9),
-  (31, 10), (32, 1), (33, 2), (34, 3), (35, 4),
-  (36, 5), (37, 6), (38, 7), (39, 8), (40, 9),
-  (41, 10), (42, 1), (43, 2), (44, 3), (45, 4),
-  (46, 5), (47, 6), (48, 7), (49, 8), (50, 9);
+  (11, 10), (12, 1), (13, 2), (14, 3);
 
 -- Insert post
 INSERT INTO posts (lecturer_id, course_id, title, body) VALUES
   (1, 1, "Welcome to Math 101", "This is the first session of Math 101."),
   (2, 2, "Introduction to English Literature", "We will start with Shakespeare."),
   (3, 3, "Physics Fundamentals", "Understanding motion and forces."),
-  (4, 4, "Chemistry Basics", "Today we discuss atoms."),
-  (5, 5, "Biology 101", "Introduction to cellular biology."),
-  (6, 6, "Historical Perspectives", "The Renaissance era."),
-  (7, 7, "CS Intro", "Getting started with programming."),
-  (8, 8, "Art Appreciation", "Analyzing famous paintings."),
-  (9, 9, "Music Theory", "Understanding scales and chords."),
-  (10, 10, "PE Introduction", "Overview of physical fitness activities.");
+  (1, 4, "Chemistry Basics", "Today we discuss atoms."),
+  (2, 5, "Biology 101", "Introduction to cellular biology."),
+  (3, 6, "Historical Perspectives", "The Renaissance era."),
+  (1, 7, "CS Intro", "Getting started with programming."),
+  (2, 8, "Art Appreciation", "Analyzing famous paintings."),
+  (3, 9, "Music Theory", "Understanding scales and chords."),
+  (1, 10, "PE Introduction", "Overview of physical fitness activities.");
 
