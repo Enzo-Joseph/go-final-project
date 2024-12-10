@@ -4,6 +4,8 @@ import (
 	"go-final-project/controllers"
 	"go-final-project/models"
 
+	"github.com/gin-contrib/sessions"
+	"github.com/gin-contrib/sessions/cookie"
 	"github.com/gin-gonic/gin"
 )
 
@@ -13,12 +15,26 @@ func main() {
 	r := gin.Default()
 	r.LoadHTMLGlob("views/*")
 	r.Static("/static", "static")
-	r.GET("/", controllers.HomePage)
 
+	// Set up session store
+	store := cookie.NewStore([]byte("I_LOVE_FRAMEWORK_PROGRAMMING"))
+	r.Use(sessions.Sessions("session", store))
+
+	r.GET("/", controllers.HomePage)
 	r.GET("/students", controllers.AllStudents)
 	r.GET("/lecturers", controllers.AllLecturers)
 	r.GET("/lecturers/:id", controllers.LecturerByID)
 	r.GET("/courses", controllers.AllCourses)
 	r.GET("/courses/:id", controllers.CoursesByID)
+
+	r.GET("/login", controllers.LoginPage)
+	r.GET("/sign-up", controllers.SignUpPage)
+	r.POST("/api/login", controllers.Login)
+	r.POST("/api/signup", controllers.SignUp)
+	r.GET("/logout", controllers.Logout)
+
+	r.GET("/api/enroll", controllers.Enroll)
+	r.GET("/api/unenroll", controllers.Unenroll)
+
 	r.Run() // listen and serve on 0.0.0.0:8080 (for windows "localhost:8080")
 }

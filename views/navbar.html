@@ -1,8 +1,5 @@
 {{ define "navbar" }}
 
-<div class="notification is-warning is-light">
-    <center>This website is still in development. Some features may not work as expected.</center>
-</div>
 <nav class="navbar" role="navigation" aria-label="main navigation">
     <div class="navbar-brand">
         <a class="navbar-item link" href="/">
@@ -20,6 +17,24 @@
             <a class="navbar-item link" href="/courses">📚 Courses</a>
             <a class="navbar-item link" href="/activities">🎭 Activities</a>
         </div>
+
+        {{ if .user_id }}
+        <!-- logout -->
+        <div class="navbar-end">
+            <div class="navbar-item">
+                <div class="field is-grouped">
+                    <p class="control">
+                        <a class="button is-dark" href="/logout">
+                            <span class="icon">
+                                <i class="bi bi-box-arrow-in-left"></i>
+                            </span>
+                            <span>Logout</span>
+                        </a>
+                    </p>
+                </div>
+            </div>
+        </div>
+        {{ else }}
         <div class="navbar-end">
             <div class="navbar-item">
                 <div class="field is-grouped">
@@ -42,6 +57,8 @@
                 </div>
             </div>
         </div>
+        {{ end }}
+
     </div>
 </nav>
 {{ end }}

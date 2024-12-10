@@ -12,6 +12,12 @@ type Course struct {
 	StudentCount int
 }
 
+type StudentCourse struct {
+	gorm.Model
+	CourseID string
+	StudentID int
+}
+
 func GetCourses() ([]Course, error) {
 	var courses []Course
 
@@ -59,4 +65,29 @@ func GetCoursesByLecturerID(lecturerID string) ([]Course, error) {
 	res := DB.Find(&courses, "lecturer_id=?", lecturerID)
 
 	return courses, res.Error
+}
+
+func EnrollToCourse(courseID string, studentID int) error {
+	enrollment := StudentCourse{CourseID: courseID, StudentID: studentID}
+
+	return DB.Create(&enrollment).Error
+}
+
+func RemoveEnrollment(courseID string, studentID int) error {
+	return DB.Unscoped().Where("course_id = ?", courseID).Where("student_id = ?", studentID).Delete(&StudentCourse{}).Error
+}
+
+func CheckEnrollment(courseID string, studentID int) (StudentCourse, error) {
+	var enrollment StudentCourse
+
+	res := DB.Table("student_courses").
+		Where("course_id = ?", courseID).
+		Where("student_id = ?", studentID).
+		First(&enrollment)
+
+	if res.Error != nil {
+		return StudentCourse{}, res.Error
+	}
+
+	return enrollment, nil
 }

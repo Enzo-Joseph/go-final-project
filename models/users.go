@@ -7,6 +7,7 @@ type User struct {
 	ID     int
 	Name     string
 	Username    string
+	Password    string
 	Role   string
 }
 
@@ -45,4 +46,38 @@ func GetLecturerByID(id string) (User, error) {
 		Find(&user)
 
 	return user, res.Error
+}
+
+func CheckAuth(username string, password string) (User, error) {
+	var user User
+
+	res := DB.Table("users").
+		Select("users.id, users.name, users.username, users.role").
+		Where("users.username=?", username).
+		Where("users.password=?", password).
+		Find(&user)
+
+	return user, res.Error
+}
+
+func CheckUsername(username string) (User, error) {
+	var user User
+
+	res := DB.Table("users").
+		Select("users.id").
+		Where("users.username=?", username).
+		Find(&user)
+
+	return user, res.Error
+}
+
+func CreateUser(name string, username string, password string, role string) error {
+	user := User{
+		Name:     name,
+		Username: username,
+		Password: password,
+		Role:     role,
+	}
+
+	return DB.Create(&user).Error
 }
