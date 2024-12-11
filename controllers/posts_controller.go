@@ -58,3 +58,30 @@ func PostsByCourse(c *gin.Context) {
 		},
 	)
 }
+
+func EditPost(c *gin.Context) {
+	postID := c.PostForm("post_id")
+	title := c.PostForm("title")
+	body := c.PostForm("body")
+
+	session := sessions.Default(c)
+	userRole := session.Get("user_role")
+
+	if userRole != "lecturer" {
+		// return failed
+		c.JSON(http.StatusUnauthorized, gin.H{
+			"message": "Unauthorized",
+		})
+		return
+	}
+
+	// edit description
+	err := models.EditPost(postID, title, body)
+	if err != nil {
+		panic(err)
+	} else {
+		c.JSON(http.StatusOK, gin.H{
+			"message": "Post edited",
+		})
+	}
+}

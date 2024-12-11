@@ -25,3 +25,12 @@ func GetPostsByCourse(courseID string) ([]Post, error) {
 
 	return posts, res.Error
 }
+
+func EditPost(id string, title string, body string) error {
+	result := DB.Table("posts").Where("id = ?", id).Update("title", title).Update("body", body)
+	if result.Error != nil {
+		return result.Error
+	}
+
+	return nil
+}
