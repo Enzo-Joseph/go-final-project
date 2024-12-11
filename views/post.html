@@ -1,0 +1,134 @@
+{{template "header" .}}
+{{template "navbar" .}}
+
+<div class="container">
+    {{ if eq .user_role "lecturer" }}
+    <div class="buttons is-right is-grouped">
+        <button id="delete" class="button is-danger" style="float: right;">Delete&nbsp;&nbsp;<i class="bi bi-trash"></i></button>
+        <button id="edit" class="button is-info" style="float: right;">Edit&nbsp;&nbsp;<i class="bi bi-pencil"></i></button>
+    </div>
+    {{ end }}
+    <h4 class="title is-4">Post Details 🔍</h4>
+    <h1 class="title is-1">{{.post.Title}}</h1>
+    <div class="card" >
+        <div class="card-content">
+            <div class="content">
+                <p class="title is-4">{{.post.Body}}</p>
+            </div>
+            <div class="buttons is-centered is-grouped">
+                <a class="button is-dark" href="/courses/{{.post.CourseID}}"><i class="bi bi-arrow-left"></i>&nbsp;&nbsp;Back to Course</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal">
+    <div class="modal-background"></div>
+    <div class="modal-card">
+        <header class="modal-card-head">
+            <p class="modal-card-title">Edit Post</p>
+            <button class="delete" aria-label="close"></button>
+        </header>
+        <section class="modal-card-body">
+            <div class="field">
+                <label class="label">Title</label>
+                <div class="control">
+                    <input id="post_title" class="input" type="text" placeholder="Text input" value="{{.post.Title}}">
+                </div>
+            </div>
+            <div class="field">
+                <label class="label">Body</label>
+                <div class="control">
+                    <textarea id="post_body" class="textarea" placeholder="Textarea">{{.post.Body}}</textarea>
+                </div>
+            </div>
+        </section>
+        <footer class="modal-card-foot">
+            <div class="buttons">
+                <button id="save_changes" class="button is-success">Save changes</button>
+                <button class="button">Cancel</button>
+            </div>
+        </footer>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        // Functions to open and close a modal
+        function openModal($el) {
+            $el.classList.add('is-active');
+        }
+
+        function closeModal($el) {
+            $el.classList.remove('is-active');
+        }
+
+        function closeAllModals() {
+            (document.querySelectorAll('.modal') || []).forEach(($modal) => {
+            closeModal($modal);
+            });
+        }
+
+        // Add a click event on buttons to open a specific modal
+        (document.querySelectorAll('.js-modal-trigger') || []).forEach(($trigger) => {
+            const modal = $trigger.dataset.target;
+            const $target = document.getElementById(modal);
+
+            $trigger.addEventListener('click', () => {
+            openModal($target);
+            });
+        });
+
+        // Add a click event on various child elements to close the parent modal
+        (document.querySelectorAll('.modal-background, .modal-close, .modal-card-head .delete, .modal-card-foot .button') || []).forEach(($close) => {
+            const $target = $close.closest('.modal');
+
+            $close.addEventListener('click', () => {
+            closeModal($target);
+            });
+        });
+
+        // Add a keyboard event to close all modals
+        document.addEventListener('keydown', (event) => {
+            if(event.key === "Escape") {
+            closeAllModals();
+            }
+        });
+    });
+
+    $("#edit").click(function() {
+        // open modal
+        $(".modal").addClass("is-active");
+    });
+
+    $("#save_changes").click(function() {
+        $.ajax({
+            url: "/api/edit/post",
+            type: "POST",
+            data: {
+                post_id: "{{.post.ID}}",
+                title: $("#post_title").val(),
+                body: $("#post_body").val(),
+            },
+            success: function(data) {
+                location.reload();
+            }
+        });
+    });
+
+    $("#delete").click(function() {
+        $.ajax({
+            url: "/api/delete/post",
+            type: "POST",
+            data: {
+                post_id: "{{.post.ID}}",
+            },
+            success: function(data) {
+                alert(data.message);
+                window.location.href = "/courses/{{.post.CourseID}}";
+            }
+        });
+    });
+</script>
+
+{{template "footer" .}}

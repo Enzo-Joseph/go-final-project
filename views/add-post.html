@@ -1,0 +1,59 @@
+{{template "header" .}}
+{{template "navbar" .}}
+
+<div class="container">
+    <h1 class="title is-1">Add Post ➕</h1>
+    <div id="form">
+        <div class="field">
+        <div class="field">
+            <label class="label">Course</label>
+            <div class="control">
+                <div  class="select is-fullwidth">
+                    <select name="course">
+                        {{ range .courses }}
+                        <option value="{{.ID}}">{{.Name}} - {{.Description}}</option>
+                        {{ end }}
+                    </select>
+                </div>
+            </div>
+        </div>
+        </div>
+        <div class="field">
+            <label class="label">Title</label>
+            <div class="control">
+                <input id="post_title" class="input" type="text" placeholder="Title here">
+            </div>
+        </div>
+        <div class="field">
+            <label class="label">Body</label>
+            <div class="control">
+                <textarea id="post_body" class="textarea" placeholder="Some content here"></textarea>
+            </div>
+        </div>
+        <div class="field is-grouped is-grouped-right">
+            <div class="control">
+                <button id="add_post" class="button is-link">Add Post to Course</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $("#add_post").click(function() {
+        $.ajax({
+            url: "/api/post",
+            type: "POST",
+            data: {
+                course_id: $("select[name=course]").val(),
+                title: $("#post_title").val(),
+                body: $("#post_body").val(),
+            },
+            success: function(data) {
+                alert(data.message);
+                window.location.href = "/post/" + data.post_id;
+            }
+        });
+    });
+</script>
+
+{{template "footer" .}}

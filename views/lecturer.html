@@ -19,6 +19,22 @@
                 </ul>
             </div>
         </div>
+        <br>
+        <h1 class="title is-2">👨‍🏫 {{.lecturer.Name}}</h1>
+        <p>Courses : </p>
+        <div class="columns is-multiline">
+            {{range .courses}}
+            <div class="column is-4">
+                <div class="card">
+                    <div class="card-content">
+                        <div class="content">
+                            <p class="title is-4"><a href="/courses/{{.ID}}">{{.Name}} </a></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {{end}}
+        </div>
     </div>
 </div>
 

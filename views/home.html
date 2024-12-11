@@ -14,7 +14,13 @@
         </div>
         <br>
         <div class="has-text-centered">
-            <h1 class="title is-2">Hi, {{ .user_name }}!</h1>
+            <h1 class="title is-2">
+                {{ if .user_id }}
+                Welcome, {{.user_name}}!
+                {{ else }}
+                Welcome, Guest!
+                {{ end }}
+            </h1>
         </div>
         <br>
         <div class="columns is-multiline">
@@ -33,22 +39,6 @@
                         <p class="title is-4">Lecturers</p>
                         <p class="subtitle is-6">View all lecturers and their courses.</p>
                         <a href="/lecturers" class="button is-light">View Lecturers 👤</a>
-                    </div>
-                </div>
-            </div>
-            <div class="column is-6">
-                <div class="card">
-                    <div class="card-content">
-                        <p class="title is-4">Dummy Section</p>
-                        <p class="subtitle is-6">This section is currently under development.</p>
-                    </div>
-                </div>
-            </div>
-            <div class="column is-6">
-                <div class="card">
-                    <div class="card-content">
-                        <p class="title is-4">Dummy Section</p>
-                        <p class="subtitle is-6">This section is currently under development.</p>
                     </div>
                 </div>
             </div>

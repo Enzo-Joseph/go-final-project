@@ -1,6 +1,8 @@
 package models
 
-import "gorm.io/gorm"
+import (
+	"gorm.io/gorm"
+)
 
 type Course struct {
 	gorm.Model
@@ -50,7 +52,7 @@ func GetCoursesByStudentID(studentID int) ([]Course, error) {
 
 	res := DB.Table("courses").
 		Select("courses.id, courses.name, courses.description, courses.lecturer_id, users.name as lecturer_name, COUNT(student_courses.student_id) as student_count").
-		Joins("left join users as lecturer on courses.lecturer_id=users.id").
+		Joins("left join users on courses.lecturer_id=users.id").
 		Joins("left join student_courses on courses.id=student_courses.course_id").
 		Where("student_courses.student_id=?", studentID).
 		Group("courses.id").
@@ -90,4 +92,13 @@ func CheckEnrollment(courseID string, studentID int) (StudentCourse, error) {
 	}
 
 	return enrollment, nil
+}
+
+func EditDescription(courseID string, description string) error {
+	result := DB.Table("courses").Where("id = ?", courseID).Update("description", description)
+	if result.Error != nil {
+		return result.Error
+	}
+
+	return nil
 }

@@ -11,7 +11,22 @@
                 </div>
             </div>
         </div>
-    {{end}}
+        <br>
+        <h1 class="title is-2">👨‍🏫 Lecturers</h1>
+        <div class="columns is-multiline">
+            {{range .lecturers}}
+            <div class="column is-4">
+                <div class="card">
+                    <div class="card-content">
+                        <div class="content">
+                            <p class="title is-4"><a href="/lecturers/{{.ID}}">{{.Name}} </a></p>
+                        </div>
+                    </div>
+                </div>
+            </div>   
+            {{end}}
+        </div>
+    </div>
 </div>
 
 

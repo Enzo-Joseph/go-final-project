@@ -26,6 +26,16 @@ func main() {
 	r.GET("/lecturers/:id", controllers.LecturerByID)
 	r.GET("/courses", controllers.AllCourses)
 	r.GET("/courses/:id", controllers.CoursesByID)
+	r.GET("/my-courses", controllers.MyCourses)
+
+	r.GET("/post/:id", controllers.PostByID)
+	r.GET("/post/new", controllers.NewPostPage)
+	r.POST("/api/post", controllers.CreatePost)
+	r.POST("/api/edit/post", controllers.EditPost)
+	r.POST("/api/delete/post", controllers.DeletePost)
+
+	r.GET("/lecturer-zone", controllers.LecturerZone)
+	r.POST("/api/edit/description", controllers.EditDescription)
 
 	r.GET("/login", controllers.LoginPage)
 	r.GET("/sign-up", controllers.SignUpPage)

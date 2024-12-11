@@ -103,3 +103,54 @@ func CoursesByID(c *gin.Context) {
 		},
 	)
 }
+
+func MyCourses(c *gin.Context) {
+	session := sessions.Default(c)
+	userID := session.Get("user_id").(int)
+
+	courses, err := models.GetCoursesByStudentID(userID)
+
+	if err != nil {
+		panic(err)
+	}	
+
+	userName := session.Get("user_name")
+	userRole := session.Get("user_role")
+
+	c.HTML(
+		http.StatusOK,
+		"my-courses.html",
+		gin.H{
+			"courses": courses,
+			"user_id":  userID,
+			"user_name": userName,
+			"user_role": userRole,
+		},
+	)
+}
+
+func EditDescription(c *gin.Context) {
+	courseID := c.PostForm("course_id")
+	desc := c.PostForm("description")
+
+	session := sessions.Default(c)
+	userRole := session.Get("user_role")
+
+	if userRole != "lecturer" {
+		// return failed
+		c.JSON(http.StatusUnauthorized, gin.H{
+			"message": "Unauthorized",
+		})
+		return
+	}
+
+	// edit description
+	err := models.EditDescription(courseID, desc)
+	if err != nil {
+		panic(err)
+	} else {
+		c.JSON(http.StatusOK, gin.H{
+			"message": "Description edited",
+		})
+	}
+}
