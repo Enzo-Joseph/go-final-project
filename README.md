@@ -1,6 +1,6 @@
 # GO-Classroom
 
-[home-page]
+![home-page](static/images/IMG-20241211-WA0016.jpg)
 
 ## Introduction
 
@@ -16,16 +16,10 @@ https://youtu.be/F_gyMNhuAS8
 
 THere are pages to see the different courses and their posts, and pages to see the different lecturers.
 
-[courses-page]
+![courses-page](static\images\IMG-20241211-WA0015.jpg)
 
-[specific-course-page]
+![specific-course-page](static\images\IMG-20241211-WA0013.jpg)
 
-[lecturers-page]
+![add-post-page](static\images\IMG-20241211-WA0014.jpg)
 
-[specific-lecturer-page]
-
-There are also a sign-in and login page.
-
-[sign-in-page]
-
-[login-page]
+There are also a sign-in and login pages.
