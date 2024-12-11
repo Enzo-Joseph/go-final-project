@@ -1,0 +1,23 @@
+{{ template "header" .}}
+{{ template "navbar" .}}
+
+<div class="container">
+    <h1 class="title is-1">List of Courses that you teach 📚</h1>
+    <ul>
+        {{range .courses}}
+        <div class="card">
+            <div class="card-content">
+                <div class="content">
+                    <p>
+                        <span class="title is-3">📕 {{.Name}}</span>
+                        <a href="/courses/{{.ID}}" class="button is-info" style="float: right;">View Course</a><br>
+                        <p></p>
+                    </p>
+                </div>
+            </div>
+        </div>
+        {{end}}
+    </ul>
+</div>
+
+{{ template "footer" .}}

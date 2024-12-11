@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"fmt"
 	"go-final-project/models"
 	"net/http"
 
@@ -57,6 +58,40 @@ func LecturerByID(c *gin.Context) {
 		gin.H{
 			"lecturer": lecturer,
 			"courses":  courses,
+			"user_id":  userID,
+			"user_name": userName,
+			"user_role": userRole,
+		},
+	)
+}
+
+func LecturerZone(c *gin.Context) {
+	session := sessions.Default(c)
+	userID := session.Get("user_id")
+	userName := session.Get("user_name")
+	userRole := session.Get("user_role")
+
+	if userID == nil {
+		c.Redirect(http.StatusSeeOther, "/login")
+		return
+	}
+	if userRole != "lecturer" {
+		c.Redirect(http.StatusSeeOther, "/")
+		return
+	}
+
+	// get courses from lecturer
+	courses, err := models.GetCoursesByLecturerID(fmt.Sprintf("%d", userID))
+
+	if err != nil {
+		panic(err)
+	}
+
+	c.HTML(
+		http.StatusOK,
+		"lecturer-zone.html",
+		gin.H{
+			"courses": courses,
 			"user_id":  userID,
 			"user_name": userName,
 			"user_role": userRole,

@@ -15,7 +15,9 @@
     <div id="navbar-main" class="navbar-menu">
         <div class="navbar-start">
             <a class="navbar-item link" href="/courses">📚 Courses</a>
-            <a class="navbar-item link" href="/activities">🎭 Activities</a>
+            {{ if eq .user_role "lecturer" }}
+            <a class="navbar-item link" href="/lecturer-zone">👨‍🏫 Lecturer Zone</a>
+            {{ end }}
         </div>
 
         {{ if .user_id }}
