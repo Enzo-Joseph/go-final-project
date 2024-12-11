@@ -10,7 +10,7 @@
                 <div class="card-content">
                     <div class="content">
                         <i class="bi bi-mortarboard-fill" style="font-size: 2em;"></i>&nbsp;&nbsp;&nbsp;
-                        <span class="title is-3 has-text-grey-light">{{.course.LecturerName}}</span>
+                        <a href="/lecturers/{{.course.LecturerID}}" class="title is-3 has-text-grey-light">{{.course.LecturerName}}</a>
                     </div>
                 </div>
             </div>
@@ -91,7 +91,7 @@
     </div>
     <div class="columns is-multiline">
         {{range .posts }}
-        <div class="column is-6">
+        <div class="column is-12">
             <div class="card">
                 <div class="card-content">
                     <div class="content">

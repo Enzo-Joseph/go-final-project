@@ -2,14 +2,21 @@
 {{template "navbar" .}}
 
 <div class="container">
-    <div class="has-text-centered">
-        <div class="hero is-dark is-bold">
-            <div class="hero-body">
-                <div class="container">
-                    <img src="/static/images/app.png" alt="ClassHub Logo" style="max-height: 100px;">
-                    <h1 class="title is-2">ClassHub</h1>
-                    <h1 class="title is-4">The #1 Classroom App</h1>
-                </div>
+    <div class="column is-12">
+        <div class="card">
+            <div class="card-content">
+                <h1 class="title is-2">👨‍🏫 {{.lecturer.Name}}</h1>
+                <br>
+                <p class="subtitle is-3">Email</p>
+                <p class="is-4">{{.lecturer.Username}}@its.ac.id</p>
+                <p class="subtitle is-3">Courses : </p>
+                <ul>
+                    {{range .courses}}
+                        <li>
+                            <a href="/courses/{{.ID}}">{{.Name}}</a>
+                        </li>
+                    {{end}}
+                </ul>
             </div>
         </div>
         <br>
