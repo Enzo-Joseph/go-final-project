@@ -2,207 +2,57 @@
 {{template "navbar" .}}
 
 <div class="container">
-    <h4 class="title is-4">Course Details 🔍</h4>
-    <h1 class="title is-1">📕 {{.course.Name}}</h1>
-    <div class="columns">
-        <div class="column">
-            <div class="card" style="min-height: 150px;">
-                <div class="card-content">
-                    <div class="content">
-                        <i class="bi bi-mortarboard-fill" style="font-size: 2em;"></i>&nbsp;&nbsp;&nbsp;
-                        <span class="title is-3 has-text-grey-light">{{.course.LecturerName}}</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="column">
-            <div class="card" style="min-height: 150px;">
-                <div class="card-content">
-                    <div class="content">
-                        <i class="bi bi-person-fill" style="font-size: 2em;"></i>&nbsp;&nbsp;&nbsp;
-                        <span class="title is-3 has-text-grey-light"><span style="color: rgb(172, 0, 0)">{{.course.StudentCount}}</span> Student(s) Enrolled</span><br>
-                        {{ if eq .user_role "student" }}
-                            {{ if .isEnrolled }}
-                            <span class="title is-5 has-text-success">(You are currently enrolled)</span>
-                            {{ else }}
-                            <span class="title is-5 has-text-danger">(You are currently not enrolled)</span>
-                            {{ end }}
+    <h1 class="title is-1">Add Post ➕</h1>
+    <div id="form">
+        <div class="field">
+        <div class="field">
+            <label class="label">Course</label>
+            <div class="control">
+                <div  class="select is-fullwidth">
+                    <select name="course">
+                        {{ range .courses }}
+                        <option value="{{.ID}}">{{.Name}} - {{.Description}}</option>
                         {{ end }}
-                    </div>
+                    </select>
                 </div>
+            </div>
+        </div>
+        </div>
+        <div class="field">
+            <label class="label">Title</label>
+            <div class="control">
+                <input id="post_title" class="input" type="text" placeholder="Title here">
+            </div>
+        </div>
+        <div class="field">
+            <label class="label">Body</label>
+            <div class="control">
+                <textarea id="post_body" class="textarea" placeholder="Some content here"></textarea>
+            </div>
+        </div>
+        <div class="field is-grouped is-grouped-right">
+            <div class="control">
+                <button id="add_post" class="button is-link">Add Post to Course</button>
             </div>
         </div>
     </div>
-    <div class="card">
-        <div class="card-content">
-            <div class="content">
-                <i class="bi bi-chat-fill" style="font-size: 2em;"></i>&nbsp;&nbsp;&nbsp;
-                <span class="title is-3 has-text-grey-light">{{.course.Description}}</span>
-                <button id="edit_desc" class="button is-info" style="float: right;">Edit&nbsp;&nbsp;<i class="bi bi-pencil"></i></button>
-            </div>
-        </div>
-    </div>
-    {{ if eq .user_role "student" }}
-        {{ if .isEnrolled }}
-        <div class="card" >
-            <div class="card-content">
-                <div class="content has-text-centered">
-                    <h1 class="title is-3">You are enrolled</h1>
-                    <p>You are only able to un-enroll during the first week of the course</p>
-                    <div class="buttons is-centered is-grouped">
-                        <a class="button is-dark" href="/courses"><i class="bi bi-arrow-left"></i>&nbsp;&nbsp;Back to Courses</a>
-                        <button id="unenroll_btn" class="button is-info">Un-enroll Now 🚶‍♂️</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-        {{ else }}
-        <div class="card" >
-            <div class="card-content">
-                <div class="content has-text-centered">
-                    <h1 class="title is-3">Ready to enroll?</h1>
-                    <p>By continuing, you agree to your profile and enrollment request being reviewed by the lecturer of this course</p>
-                    <div class="buttons is-centered is-grouped">
-                        <a class="button is-dark" href="/courses"><i class="bi bi-arrow-left"></i>&nbsp;&nbsp;Back to Courses</a>
-                        {{ if .user_id }}
-                        <button id="enroll_btn" class="button is-info">Enroll Now 🚀</button>
-                        {{ else }}
-                        <button onclick="alert('You must be logged in to enroll!')" class="button is-info">Enroll Now 🚀</button>
-                        {{ end }}
-                    </div>
-                </div>
-            </div>
-        </div>
-        {{ end }}
-    {{ end }}
-
-    {{ if or (and .is_enrolled (eq .user_role "student")) (eq .user_role "lecturer") }}
-    <div class="card" >
-        <div class="card-content">
-            <div class="content has-text-centered">
-                <h1 class="title is-3 has-text-centered">Posts by {{.course.LecturerName}} 📝</h1>
-                {{ if eq .user_role "lecturer" }}
-                <div class="buttons is-centered is-grouped">
-                    <a class="button is-dark" href="/post/new"><i class="bi bi-plus"></i>&nbsp;&nbsp;Add Post</a>
-                </div>
-                {{ end }}
-            </div>
-        </div>
-    </div>
-    <div class="columns is-multiline">
-        {{range .posts }}
-        <div class="column is-6">
-            <div class="card">
-                <div class="card-content">
-                    <div class="content">
-                        <p class="title is-4"><a href="/post/{{.ID}}">{{.Title}} </a></p>
-                        <p class="subtitle is-6">{{.Body}} </p>
-                    </div>
-                </div>
-            </div>
-        </div>
-        {{end}}
-    </div>
-    {{ else }}
-    <div class="card" >
-        <div class="card-content">
-            <div class="content has-text-centered">
-                <h1 class="title is-3 has-text-centered">Please enroll to view posts</h1>
-            </div>
-        </div>
-    </div>
-    <div class="columns is-multiline">
-        <div class="column is-6">
-            <div class="card">
-                <div class="card-content">
-                    <div class="content">
-                        <div class="skeleton-lines">
-                            <div></div>
-                            <div></div>
-                            <div></div>
-                            <div></div>
-                            <div></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="column is-6">
-            <div class="card">
-                <div class="card-content">
-                    <div class="content">
-                        <div class="skeleton-lines">
-                            <div></div>
-                            <div></div>
-                            <div></div>
-                            <div></div>
-                            <div></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    {{ end }}
 </div>
 
 <script>
-    $("#enroll_btn").click(function() {
+    $("#add_post").click(function() {
         $.ajax({
-            url: "/api/enroll",
-            type: "GET",
+            url: "/api/post",
+            type: "POST",
             data: {
-                course_id: "{{.course.ID}}",
+                course_id: $("select[name=course]").val(),
+                title: $("#post_title").val(),
+                body: $("#post_body").val(),
             },
-            success: function(response) {
-                alert(response.message);
-                location.reload();
-            },
-            error: function(error) {
-                alert(error.responseJSON.message);
+            success: function(data) {
+                alert(data.message);
+                window.location.href = "/post/" + data.post_id;
             }
         });
-    });
-
-    $("#unenroll_btn").click(function() {
-        $.ajax({
-            url: "/api/unenroll",
-            type: "GET",
-            data: {
-                course_id: "{{.course.ID}}",
-            },
-            success: function(response) {
-                alert(response.message);
-                location.reload();
-            },
-            error: function(error) {
-                alert(error.responseJSON.message);
-            }
-        });
-    });
-
-    $("#edit_desc").click(function() {
-        // show promptbox
-        let desc = prompt("Enter new description:", "{{.course.Description}}");
-        if (desc == null || desc == "") {
-            alert("Please enter a description");
-        } else {
-            $.ajax({
-                url: "/api/edit/description",
-                type: "POST",
-                data: {
-                    course_id: "{{.course.ID}}",
-                    description: desc,
-                },
-                success: function(response) {
-                    alert(response.message);
-                    location.reload();
-                },
-                error: function(error) {
-                    alert(error.responseJSON.message);
-                }
-            });
-        }
     });
 </script>
 

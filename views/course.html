@@ -38,7 +38,9 @@
             <div class="content">
                 <i class="bi bi-chat-fill" style="font-size: 2em;"></i>&nbsp;&nbsp;&nbsp;
                 <span class="title is-3 has-text-grey-light">{{.course.Description}}</span>
+                {{ if eq .user_role "lecturer" }}
                 <button id="edit_desc" class="button is-info" style="float: right;">Edit&nbsp;&nbsp;<i class="bi bi-pencil"></i></button>
+                {{ end }}
             </div>
         </div>
     </div>
@@ -76,16 +78,14 @@
         {{ end }}
     {{ end }}
 
-    {{ if or (and .is_enrolled (eq .user_role "student")) (eq .user_role "lecturer") }}
+    {{ if eq .user_role "lecturer" }}
     <div class="card" >
         <div class="card-content">
             <div class="content has-text-centered">
                 <h1 class="title is-3 has-text-centered">Posts by {{.course.LecturerName}} 📝</h1>
-                {{ if eq .user_role "lecturer" }}
                 <div class="buttons is-centered is-grouped">
                     <a class="button is-dark" href="/post/new"><i class="bi bi-plus"></i>&nbsp;&nbsp;Add Post</a>
                 </div>
-                {{ end }}
             </div>
         </div>
     </div>
@@ -103,46 +103,72 @@
         </div>
         {{end}}
     </div>
-    {{ else }}
-    <div class="card" >
-        <div class="card-content">
-            <div class="content has-text-centered">
-                <h1 class="title is-3 has-text-centered">Please enroll to view posts</h1>
-            </div>
-        </div>
-    </div>
-    <div class="columns is-multiline">
-        <div class="column is-6">
-            <div class="card">
+    {{ end }}
+
+    {{ if eq .user_role "student" }}
+        {{ if .isEnrolled }}
+            <div class="card" >
                 <div class="card-content">
-                    <div class="content">
-                        <div class="skeleton-lines">
-                            <div></div>
-                            <div></div>
-                            <div></div>
-                            <div></div>
-                            <div></div>
+                    <div class="content has-text-centered">
+                        <h1 class="title is-3 has-text-centered">Posts by {{.course.LecturerName}} 📝</h1>
+                    </div>
+                </div>
+            </div>
+            <div class="columns is-multiline">
+                {{range .posts }}
+                <div class="column is-6">
+                    <div class="card">
+                        <div class="card-content">
+                            <div class="content">
+                                <p class="title is-4"><a href="/post/{{.ID}}">{{.Title}} </a></p>
+                                <p class="subtitle is-6">{{.Body}} </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {{end}}
+            </div>
+        {{ else }}
+            <div class="card" >
+                <div class="card-content">
+                    <div class="content has-text-centered">
+                        <h1 class="title is-3 has-text-centered">Please enroll to view posts</h1>
+                    </div>
+                </div>
+            </div>
+            <div class="columns is-multiline">
+                <div class="column is-6">
+                    <div class="card">
+                        <div class="card-content">
+                            <div class="content">
+                                <div class="skeleton-lines">
+                                    <div></div>
+                                    <div></div>
+                                    <div></div>
+                                    <div></div>
+                                    <div></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="column is-6">
+                    <div class="card">
+                        <div class="card-content">
+                            <div class="content">
+                                <div class="skeleton-lines">
+                                    <div></div>
+                                    <div></div>
+                                    <div></div>
+                                    <div></div>
+                                    <div></div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="column is-6">
-            <div class="card">
-                <div class="card-content">
-                    <div class="content">
-                        <div class="skeleton-lines">
-                            <div></div>
-                            <div></div>
-                            <div></div>
-                            <div></div>
-                            <div></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+        {{ end }}
     {{ end }}
 </div>
 

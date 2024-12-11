@@ -2,8 +2,13 @@
 {{template "navbar" .}}
 
 <div class="container">
+    {{ if eq .user_role "lecturer" }}
+    <div class="buttons is-right is-grouped">
+        <button id="delete" class="button is-danger" style="float: right;">Delete&nbsp;&nbsp;<i class="bi bi-trash"></i></button>
+        <button id="edit" class="button is-info" style="float: right;">Edit&nbsp;&nbsp;<i class="bi bi-pencil"></i></button>
+    </div>
+    {{ end }}
     <h4 class="title is-4">Post Details 🔍</h4>
-    <button id="edit" class="button is-info" style="float: right;">Edit&nbsp;&nbsp;<i class="bi bi-pencil"></i></button>
     <h1 class="title is-1">{{.post.Title}}</h1>
     <div class="card" >
         <div class="card-content">
@@ -107,6 +112,20 @@
             },
             success: function(data) {
                 location.reload();
+            }
+        });
+    });
+
+    $("#delete").click(function() {
+        $.ajax({
+            url: "/api/delete/post",
+            type: "POST",
+            data: {
+                post_id: "{{.post.ID}}",
+            },
+            success: function(data) {
+                alert(data.message);
+                window.location.href = "/courses/{{.post.CourseID}}";
             }
         });
     });

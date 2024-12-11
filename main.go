@@ -29,7 +29,10 @@ func main() {
 	r.GET("/my-courses", controllers.MyCourses)
 
 	r.GET("/post/:id", controllers.PostByID)
+	r.GET("/post/new", controllers.NewPostPage)
+	r.POST("/api/post", controllers.CreatePost)
 	r.POST("/api/edit/post", controllers.EditPost)
+	r.POST("/api/delete/post", controllers.DeletePost)
 
 	r.GET("/lecturer-zone", controllers.LecturerZone)
 	r.POST("/api/edit/description", controllers.EditDescription)
