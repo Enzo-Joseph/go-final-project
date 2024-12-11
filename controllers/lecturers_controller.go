@@ -30,6 +30,13 @@ func AllLecturers(c *gin.Context) {
 			"user_role": userRole,
 		},
 	)
+
+	// c.JSON(http.StatusOK, gin.H{
+	// 	"lecturers": lecturers,
+	// 	"user_id":   userID,
+	// 	"user_name": userName,
+	// 	"user_role": userRole,
+	// })
 }
 
 func LecturerByID(c *gin.Context) {
@@ -55,9 +62,9 @@ func LecturerByID(c *gin.Context) {
 		http.StatusOK,
 		"lecturer.html",
 		gin.H{
-			"lecturer": lecturer,
-			"courses":  courses,
-			"user_id":  userID,
+			"lecturer":  lecturer,
+			"courses":   courses,
+			"user_id":   userID,
 			"user_name": userName,
 			"user_role": userRole,
 		},
